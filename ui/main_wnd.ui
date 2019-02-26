@@ -18,49 +18,32 @@
   <property name="windowTitle">
    <string>Tagger</string>
   </property>
-  <widget class="QWidget" name="gridLayoutWidget">
+  <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
-     <number>0</number>
-    </property>
-    <property name="spacing">
-     <number>0</number>
-    </property>
-    <item row="0" column="0">
-     <widget class="QTabWidget" name="modeTabs">
-      <property name="tabPosition">
-       <enum>QTabWidget::North</enum>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QSplitter" name="hsplitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="currentIndex">
-       <number>1</number>
-      </property>
-      <property name="elideMode">
-       <enum>Qt::ElideNone</enum>
-      </property>
-      <widget class="QWidget" name="tagMode">
-       <attribute name="title">
-        <string>Tag</string>
-       </attribute>
+      <widget class="QSplitter" name="vsplitter">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <widget class="QListView" name="tagView"/>
       </widget>
-      <widget class="QWidget" name="explorerMode">
-       <attribute name="title">
-        <string>Explorer</string>
-       </attribute>
+      <widget class="QTableView" name="fileView">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
       </widget>
      </widget>
     </item>
@@ -82,7 +65,7 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="actSetRoot"/>
+    <addaction name="actSetRepo"/>
     <addaction name="actLoadTags"/>
     <addaction name="separator"/>
     <addaction name="actQuit"/>
@@ -110,9 +93,12 @@
    </attribute>
    <addaction name="actRefresh"/>
   </widget>
-  <action name="actSetRoot">
+  <action name="actSetRepo">
    <property name="text">
-    <string>Set &amp;Root...</string>
+    <string>Set &amp;Repo...</string>
+   </property>
+   <property name="toolTip">
+    <string>Set Repository</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
@@ -149,10 +135,10 @@
  <resources/>
  <connections>
   <connection>
-   <sender>actSetRoot</sender>
+   <sender>actSetRepo</sender>
    <signal>triggered()</signal>
    <receiver>MainWnd</receiver>
-   <slot>setRoot()</slot>
+   <slot>setRepo()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -198,7 +184,7 @@
   </connection>
  </connections>
  <slots>
-  <slot>setRoot()</slot>
   <slot>loadTags()</slot>
+  <slot>setRepo()</slot>
  </slots>
 </ui>

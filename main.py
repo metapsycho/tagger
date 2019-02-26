@@ -8,12 +8,12 @@ class MainWnd(QMainWindow, Ui_MainWnd):
         super(MainWnd, self).__init__(parent)
         self.setupUi(self)
 
-    def setRoot(self):
+    def setRepo(self):
         ret = QFileDialog.getExistingDirectory(
             parent=self,
-            caption='set root',
+            caption='set repo',
             directory='.')
-        print('setRoot', ret)
+        print('setRepo', ret)
 
     def loadTags(self):
         ret = QFileDialog.getOpenFileName(
