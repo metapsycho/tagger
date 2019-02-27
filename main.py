@@ -1,6 +1,6 @@
 import sys
 import os
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
+from PyQt5.QtWidgets import *
 from ui.main_wnd import Ui_MainWnd
 from mgr import *
 
@@ -12,9 +12,12 @@ class MainWnd(QMainWindow, Ui_MainWnd):
         width = self.centralLayout.contentsMargins().left()
         self.hsplitter.setHandleWidth(width)
         self.vsplitter.setHandleWidth(width)
+        self.fileView.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.fileView.horizontalHeader().setStretchLastSection(True)
 
         self.repo = Repo()
         self.explorer = Explorer(self.repo, self.cwdView, self.folderView, self)
+        self.file_list = FileList(self.repo, self.fileView, self)
 
         # TODO: remove
         self.repo.reset(os.path.abspath('.'))
