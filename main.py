@@ -10,17 +10,16 @@ class MainWnd(QMainWindow, Ui_MainWnd):
         super(MainWnd, self).__init__(parent)
         self.setupUi(self)
         width = self.centralLayout.contentsMargins().left()
-        self.hsplitter.setHandleWidth(width)
-        self.vsplitter.setHandleWidth(width)
-        self.fileView.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.fileView.horizontalHeader().setStretchLastSection(True)
+        self.centralArea.setHandleWidth(width)
+        self.filterArea.setHandleWidth(width)
+        self.fileView.setAlternatingRowColors(True)
 
         self.repo = Repo()
         self.explorer = Explorer(self.repo, self.cwdView, self.folderView, self)
         self.file_list = FileList(self.repo, self.fileView, self)
 
         # TODO: remove
-        self.repo.reset(os.path.abspath('.'))
+        self.repo.reset(os.path.abspath('G:\Cloud\百度云同步盘\Readings'))
 
     def setRepo(self):
         ret = QFileDialog.getExistingDirectory(

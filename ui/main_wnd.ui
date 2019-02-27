@@ -52,11 +52,27 @@ QWidget#centralWidget
      <number>5</number>
     </property>
     <item>
-     <widget class="QSplitter" name="hsplitter">
+     <widget class="QSplitter" name="centralArea">
+      <property name="font">
+       <font>
+        <family>微软雅黑</family>
+       </font>
+      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QSplitter" name="vsplitter">
+      <widget class="QSplitter" name="filterArea">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>微软雅黑</family>
+        </font>
+       </property>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -87,6 +103,11 @@ QWidget#centralWidget
          </item>
          <item>
           <widget class="QListView" name="folderView">
+           <property name="font">
+            <font>
+             <family>微软雅黑</family>
+            </font>
+           </property>
            <property name="styleSheet">
             <string notr="true">background-color: rgb(233, 233, 233);</string>
            </property>
@@ -98,6 +119,11 @@ QWidget#centralWidget
         </layout>
        </widget>
        <widget class="QListView" name="tagView">
+        <property name="font">
+         <font>
+          <family>微软雅黑</family>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(233, 233, 233);</string>
         </property>
@@ -106,28 +132,33 @@ QWidget#centralWidget
         </property>
        </widget>
       </widget>
-      <widget class="QTableView" name="fileView">
+      <widget class="QListView" name="fileView">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <family>微软雅黑</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(233, 233, 233);</string>
+        <string notr="true">QListView{
+	background-color: rgb(233, 233, 233);
+}
+QListView::item{
+	height: 36px;
+}</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>
-       <property name="showGrid">
-        <bool>false</bool>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::ExtendedSelection</enum>
        </property>
-       <attribute name="horizontalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="verticalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
       </widget>
      </widget>
     </item>
@@ -148,6 +179,11 @@ QWidget#centralWidget
      <inactive/>
      <disabled/>
     </palette>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+    </font>
    </property>
    <property name="nativeMenuBar">
     <bool>true</bool>
@@ -170,6 +206,11 @@ QWidget#centralWidget
    <property name="toolTip">
     <string>Set Repository</string>
    </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+    </font>
+   </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
    </property>
@@ -181,6 +222,11 @@ QWidget#centralWidget
    <property name="toolTip">
     <string>Load Tags</string>
    </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+    </font>
+   </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
@@ -188,6 +234,11 @@ QWidget#centralWidget
   <action name="actQuit">
    <property name="text">
     <string>&amp;Quit</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+    </font>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>

@@ -77,19 +77,18 @@ class Explorer(QAbstractListModel):
         self.layoutChanged.emit()
 
 
-class FileList(QAbstractTableModel):
+class FileList(QAbstractListModel):
     def __init__(self, repo, file_view, parent=None):
-        QAbstractTableModel.__init__(self, parent)
+        QAbstractListModel.__init__(self, parent)
         self.repo = repo
         self.repo.addUpdateCallback(self.__onRepoUpdate)
         file_view.setModel(self)
+        # file_view.clicked.connect(self.__onFileClicked)
+
         self.checked_indices = set()
 
     def rowCount(self, parent=None, *args, **kwargs):
         return len(self.repo.files)
-
-    def columnCount(self, parent=None, *args, **kwargs):
-        return 1
 
     def data(self, index, role=None):
         if not index.isValid():
@@ -114,7 +113,7 @@ class FileList(QAbstractTableModel):
 
     def flags(self, index):
         if not index.isValid():
-            return 0
+            return Qt.ItemFlags()
         return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsUserCheckable
 
     def __onRepoUpdate(self, repo):
@@ -122,7 +121,18 @@ class FileList(QAbstractTableModel):
 
         self.layoutAboutToBeChanged.emit()
         self.dataChanged.emit(self.createIndex(0, 0),
-                              self.createIndex(self.rowCount(), self.columnCount()))
+                              self.createIndex(self.rowCount(), 0))
+        self.layoutChanged.emit()
+
+    def __onFileClicked(self, index):
+        row = index.row()
+        if row in self.checked_indices:
+            self.checked_indices.discard(row)
+        else:
+            self.checked_indices.add(row)
+
+        self.layoutAboutToBeChanged.emit()
+        self.dataChanged.emit(index, index)
         self.layoutChanged.emit()
 
 
@@ -132,17 +142,3 @@ class TagManager:
 
     def index(self):
         pass
-
-
-if __name__ == '__main__':
-    repo = Repo()
-    repo.reset(os.path.abspath('.'))
-    while True:
-        print(repo.root)
-        print(repo.dirs)
-        print(repo.files)
-        print('----------')
-        idx = input('dir:')
-        repo.enter(int(idx))
-
-
