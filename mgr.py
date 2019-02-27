@@ -81,7 +81,49 @@ class FileList(QAbstractTableModel):
     def __init__(self, repo, file_view, parent=None):
         QAbstractTableModel.__init__(self, parent)
         self.repo = repo
+        self.repo.addUpdateCallback(self.__onRepoUpdate)
         file_view.setModel(self)
+        self.checked_indices = set()
+
+    def rowCount(self, parent=None, *args, **kwargs):
+        return len(self.repo.files)
+
+    def columnCount(self, parent=None, *args, **kwargs):
+        return 1
+
+    def data(self, index, role=None):
+        if not index.isValid():
+            return QVariant()
+        if role == Qt.DisplayRole:
+            return QVariant(self.repo.files[index.row()])
+        elif role == Qt.CheckStateRole:
+            if index.row() in self.checked_indices:
+                return Qt.Checked
+            return Qt.Unchecked
+        return QVariant()
+
+    def setData(self, index, value, role=None):
+        if not index.isValid():
+            return False
+        if role == Qt.CheckStateRole:
+            if value == Qt.Checked:
+                self.checked_indices.add(index.row())
+            else:
+                self.checked_indices.discard(index.row())
+        return True
+
+    def flags(self, index):
+        if not index.isValid():
+            return 0
+        return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsUserCheckable
+
+    def __onRepoUpdate(self, repo):
+        self.checked_indices.clear()
+
+        self.layoutAboutToBeChanged.emit()
+        self.dataChanged.emit(self.createIndex(0, 0),
+                              self.createIndex(self.rowCount(), self.columnCount()))
+        self.layoutChanged.emit()
 
 
 class TagManager:
