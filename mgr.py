@@ -78,14 +78,20 @@ class Explorer(QAbstractListModel):
 
 
 class FileList(QAbstractListModel):
-    def __init__(self, repo, file_view, parent=None):
+    def __init__(self, repo, file_view, file_selector, parent=None):
         QAbstractListModel.__init__(self, parent)
         self.repo = repo
         self.repo.addUpdateCallback(self.__onRepoUpdate)
+
         file_view.setModel(self)
-        # file_view.clicked.connect(self.__onFileClicked)
+        file_view.selectionModel().selectionChanged.connect(self.__onFilesSelected)
+
+        self.file_selector = file_selector
+        self.file_selector.setChecked(False)
+        self.file_selector.stateChanged.connect(self.__onFileSelectorChecked)
 
         self.checked_indices = set()
+        self.selections = set()
 
     def rowCount(self, parent=None, *args, **kwargs):
         return len(self.repo.files)
@@ -124,16 +130,31 @@ class FileList(QAbstractListModel):
                               self.createIndex(self.rowCount(), 0))
         self.layoutChanged.emit()
 
-    def __onFileClicked(self, index):
-        row = index.row()
-        if row in self.checked_indices:
-            self.checked_indices.discard(row)
-        else:
-            self.checked_indices.add(row)
+    def __onFilesSelected(self, selected, deselected):
+        for idx in selected.indexes():
+            self.selections.add(idx.row())
+        for idx in deselected.indexes():
+            self.selections.discard(idx.row())
 
-        self.layoutAboutToBeChanged.emit()
-        self.dataChanged.emit(index, index)
-        self.layoutChanged.emit()
+        cnt = 0
+        for s in self.selections:
+            if s in self.checked_indices:
+                cnt += 1
+        self.file_selector.blockSignals(True)
+        self.file_selector.setChecked(cnt > len(self.selections) // 2)
+        self.file_selector.blockSignals(False)
+
+    def __onFileSelectorChecked(self, state):
+        if state == Qt.Checked:
+            for s in self.selections:
+                self.checked_indices.add(s)
+                self.dataChanged.emit(self.createIndex(s, 0),
+                                      self.createIndex(s, 0))
+        elif state == Qt.Unchecked:
+            for s in self.selections:
+                self.checked_indices.discard(s)
+                self.dataChanged.emit(self.createIndex(s, 0),
+                                      self.createIndex(s, 0))
 
 
 class TagManager:

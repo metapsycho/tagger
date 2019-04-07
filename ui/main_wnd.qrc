@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>res/hide_details.png</file>
+    <file>res/show_details.png</file>
+  </qresource>
+</RCC>
